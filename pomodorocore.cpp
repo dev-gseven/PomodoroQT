@@ -54,7 +54,6 @@ void PomodoroCore::tick(){
     }
     if (remainingSeconds ==  0){
         stateController.setState(StateController::State::Finished);
-        qDebug() << "Finished";
         isFinished = true;
         switchCycle();
     }

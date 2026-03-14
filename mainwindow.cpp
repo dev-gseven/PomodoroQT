@@ -5,7 +5,7 @@
 #define DIGITS 2
 #define BASE 10
 
-#define FOCUS 1
+#define FOCUS 25
 #define BREAK 5
 #define LONG 15
 
@@ -29,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
 void MainWindow::updateUI(){ // updates each second
     int seconds = pomodoroCore.getRemainingSeconds();
 
@@ -41,13 +46,6 @@ void MainWindow::updateUI(){ // updates each second
 
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-
-
 QString MainWindow::currentSession(int number){
     QString str = QString::number(number);
     return "Session: " +  str;
@@ -56,14 +54,14 @@ QString MainWindow::currentSession(int number){
 void MainWindow::on_skipButton_clicked(bool checked)
 {
     pomodoroCore.skipCycle();
-    ui->labelCycle->setText("");
+    showTemporaryStatus("Skipped Session",currentCycle());
 }
 
 void MainWindow::on_stopButton_clicked(bool checked)
 {
     pomodoroCore.reset();
     currentSession(pomodoroCore.getCycleCount());
-    showTemporaryStatus("Stopped","");
+    showTemporaryStatus("Stopped",currentCycle());
 }
 
 void MainWindow::on_playButton_clicked(bool checked)
@@ -88,40 +86,13 @@ void MainWindow::showTemporaryStatus(QString temporaryText,QString persistentTex
 
 void MainWindow::windowFocus(){
     if (pomodoroCore.isFinished){
-        // realmente focar a janela aqui.
-        qDebug() << "Chegou até windowFocus";
+        showTemporaryStatus("Timer Finished",currentCycle());
+
         this->showNormal();
         this->raise();
         this->activateWindow();
+        QApplication::alert(this);
 
         pomodoroCore.isFinished = false;
     }
 }
-
-
-/*
-
-- (void)showTemporaryStatus:(NSString *)text {
-    self.statusLabel.stringValue = text;
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)),
-                   dispatch_get_main_queue(), ^{
-        // TODO: fazer algma merda aqui
-        if ([self.statusLabel.stringValue isEqualToString:text]) {
-            self.statusLabel.stringValue = @"";
-        }
-    });
-}
-
-  */
-
-
-
-
-
-
-
-
-
-
-
