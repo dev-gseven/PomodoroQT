@@ -6,7 +6,7 @@
 
 PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes):
     focusDuration(focusMinutes*60),breakDuration(breakMinutes *60),
-    remainingSeconds(focusMinutes * 60),cycleCount(0), longDuration(longMinutes * 60){}
+    remainingSeconds(focusMinutes * 60),cycleCount(0), longDuration(longMinutes * 60), isFinished(false){}
 
 
 
@@ -54,6 +54,8 @@ void PomodoroCore::tick(){
     }
     if (remainingSeconds ==  0){
         stateController.setState(StateController::State::Finished);
+        qDebug() << "Finished";
+        isFinished = true;
         switchCycle();
     }
 }

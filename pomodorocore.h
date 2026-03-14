@@ -18,6 +18,7 @@ public:
     void add1ToCycleCount();
     void windowFocus();
     QString cycleToString();
+    bool isFinished;
 
     void setCycleCount(int newCycleCount);
     int getCycleCount() const;

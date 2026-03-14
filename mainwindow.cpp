@@ -5,7 +5,7 @@
 #define DIGITS 2
 #define BASE 10
 
-#define FOCUS 25
+#define FOCUS 1
 #define BREAK 5
 #define LONG 15
 
@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     updateUI();
+
 }
 
 void MainWindow::updateUI(){ // updates each second
@@ -35,6 +36,9 @@ void MainWindow::updateUI(){ // updates each second
     int secs = seconds % 60;
 
     ui->labelTimer->setText(QString("%1:%2").arg (mins, DIGITS, BASE, QChar('0')).arg(secs, DIGITS, BASE, QChar('0')));
+
+    windowFocus();
+
 }
 
 MainWindow::~MainWindow()
@@ -82,11 +86,17 @@ void MainWindow::showTemporaryStatus(QString temporaryText,QString persistentTex
     });
 }
 
-//void MainWindow::windowFocus(){
-//    if (pomodoroCore.getState() == StateController::State::Finished){
+void MainWindow::windowFocus(){
+    if (pomodoroCore.isFinished){
+        // realmente focar a janela aqui.
+        qDebug() << "Chegou até windowFocus";
+        this->showNormal();
+        this->raise();
+        this->activateWindow();
 
-//    }
-//}
+        pomodoroCore.isFinished = false;
+    }
+}
 
 
 /*

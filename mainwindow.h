@@ -31,6 +31,7 @@ private slots:
 
 private:
     QString currentCycle();
+    void windowFocus();
     void updateUI();
     QString currentSession(int number);
     PomodoroCore pomodoroCore;
