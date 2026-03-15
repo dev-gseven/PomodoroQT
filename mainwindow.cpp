@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QDebug>
 
 #define DIGITS 2
 #define BASE 10
@@ -46,11 +45,6 @@ void MainWindow::updateUI(){ // updates each second
 
 }
 
-QString MainWindow::currentSession(int number){
-    QString str = QString::number(number);
-    return "Session: " +  str;
-}
-
 void MainWindow::on_skipButton_clicked(bool checked)
 {
     pomodoroCore.skipCycle();
@@ -76,10 +70,15 @@ QString MainWindow::currentCycle(){
     return string;
 }
 
+QString MainWindow::currentSession(int number){
+    QString str = QString::number(number);
+    return "Session: " +  str;
+}
+
 void MainWindow::showTemporaryStatus(QString temporaryText,QString persistentText){
     ui->labelCycle->setText(temporaryText);
 
-    QTimer::singleShot(2000, this, [this,persistentText](){
+    QTimer::singleShot(1500, this, [this,persistentText](){
         ui->labelCycle->setText(persistentText);
     });
 }

@@ -24,9 +24,6 @@ public:
     int getCycleCount() const;
     int getRemainingSeconds() const;
 
-//    StateController::State getState() const;
-//    StateController::Cycle getCycle() const;
-
 private:
     int cycleCount;
     void switchCycle();

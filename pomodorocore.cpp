@@ -1,6 +1,4 @@
 #include "pomodorocore.h"
-#include <QDebug>
-//#include <QWidget>
 
 
 
@@ -12,7 +10,7 @@ PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes):
 
 void  PomodoroCore::start(){
     stateController.start(); //play/pause
-    if(cycleCount == 0){
+    if (cycleCount == 0){
         add1ToCycleCount();
     }
 }
