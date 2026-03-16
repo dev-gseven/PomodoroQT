@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#define DIGITS 2
-#define BASE 10
 
 #define FOCUS 25
 #define BREAK 5
@@ -34,15 +32,8 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateUI(){ // updates each second
-    int seconds = pomodoroCore.getRemainingSeconds();
-
-    int mins = seconds / 60;
-    int secs = seconds % 60;
-
-    ui->labelTimer->setText(QString("%1:%2").arg (mins, DIGITS, BASE, QChar('0')).arg(secs, DIGITS, BASE, QChar('0')));
-
+    ui->labelTimer->setText(pomodoroCore.updateUI());
     windowFocus();
-
 }
 
 void MainWindow::on_skipButton_clicked(bool checked)

@@ -36,8 +36,9 @@ private:
     QString currentSession(int number);
     PomodoroCore pomodoroCore;
     void showTemporaryStatus(QString temporaryText,QString persistentText);
+
     QTimer timer;
-    QTimer timer2;
+
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

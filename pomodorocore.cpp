@@ -1,12 +1,23 @@
 #include "pomodorocore.h"
 
+#define DIGITS 2
+#define BASE 10
+
 
 
 PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes):
     focusDuration(focusMinutes*60),breakDuration(breakMinutes *60),
     remainingSeconds(focusMinutes * 60),cycleCount(0), longDuration(longMinutes * 60), isFinished(false){}
 
+QString PomodoroCore::updateUI(){
+    int seconds = remainingSeconds;
 
+    int mins = seconds / 60;
+    int secs = seconds % 60;
+
+    return QString("%1:%2").arg (mins, DIGITS, BASE, QChar('0')).arg(secs, DIGITS, BASE, QChar('0'));
+
+}
 
 void  PomodoroCore::start(){
     stateController.start(); //play/pause
@@ -49,6 +60,7 @@ void PomodoroCore::tick(){
     }
     if (remainingSeconds > 0){
         --remainingSeconds;
+        //Atualizar UI por aqui, timerChanged()
     }
     if (remainingSeconds ==  0){
         stateController.setState(StateController::State::Finished);

@@ -3,6 +3,8 @@
 
 #include "statecontroller.h"
 #include <QString>
+#include <QElapsedTimer>
+//#include <QTimer>
 
 
 class PomodoroCore
@@ -19,6 +21,7 @@ public:
     void windowFocus();
     QString cycleToString();
     bool isFinished;
+    QString updateUI();
 
     void setCycleCount(int newCycleCount);
     int getCycleCount() const;
@@ -31,6 +34,9 @@ private:
     int focusDuration;
     int breakDuration;
     int remainingSeconds;
+
+    //QTimer timer;
+    QElapsedTimer timer;
 
     StateController stateController;
 };
