@@ -8,8 +8,8 @@
 
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , pomodoroCore(FOCUS,BREAK,LONG), ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    pomodoroCore(FOCUS,BREAK,LONG), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     QMainWindow::setWindowTitle("Pomodoro Loop");
@@ -21,8 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
         updateUI();
     });
 
-
-    updateUI();
+    ui->labelTimer->setText(pomodoroCore.updateUI());
 
 }
 
@@ -32,14 +31,15 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateUI(){ // updates each second
-    ui->labelTimer->setText(pomodoroCore.updateUI());
-    windowFocus();
+        ui->labelTimer->setText(pomodoroCore.updateUI());
+        windowFocus();
 }
 
 void MainWindow::on_skipButton_clicked(bool checked)
 {
     pomodoroCore.skipCycle();
     showTemporaryStatus("Skipped Session",currentCycle());
+    updateUI();
 }
 
 void MainWindow::on_stopButton_clicked(bool checked)
@@ -47,6 +47,7 @@ void MainWindow::on_stopButton_clicked(bool checked)
     pomodoroCore.reset();
     currentSession(pomodoroCore.getCycleCount());
     showTemporaryStatus("Stopped",currentCycle());
+    updateUI();
 }
 
 void MainWindow::on_playButton_clicked(bool checked)

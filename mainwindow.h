@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include <QApplication>
-#include <QWidget>
 #include <QString>
+//#include <QApplication>
 #include "pomodorocore.h"
 
 QT_BEGIN_NAMESPACE

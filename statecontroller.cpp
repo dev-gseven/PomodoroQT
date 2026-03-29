@@ -1,17 +1,43 @@
 #include "statecontroller.h"
 
-StateController::StateController():currentState(State::Idle),currentCycle(Cycle::FocusTime){}
+StateController::StateController():currentState(State::Paused),currentCycle(Cycle::FocusTime),accumulatedMs(0){}
 
 void StateController::start(){
-    if (currentState == State::Idle || currentState == State::Paused || currentState == State::Finished){
+    if (currentState != State::Running){
         currentState = State::Running;
+        elapsedTimer.start();
     }
-    else StateController::pause();
+    else {
+        StateController::pause();
+        accumulatedMs += elapsedTimer.elapsed();
+    }
 }
 
 void StateController::pause(){
-    if (currentState == State::Running)
-        currentState = State::Paused;
+    currentState = State::Paused;
+}
+
+void StateController::reset(){
+    currentState = State::Paused;
+    currentCycle = Cycle::FocusTime;
+    accumulatedMs = 0;
+}
+
+bool StateController::isElapsedTimerValid(){
+    return elapsedTimer.isValid();
+}
+
+void StateController::setAccumulatedMs(qint64 newTime){
+    accumulatedMs = newTime;
+}
+
+qint64 StateController::getAccumulatedMs(){
+    return accumulatedMs;
+}
+
+qint64 StateController::getElapsedMs() {
+
+    return elapsedTimer.elapsed();
 }
 
 void StateController::setCycle(Cycle newCycle){
@@ -22,10 +48,6 @@ void StateController::setState(State newState){
     currentState = newState;
 }
 
-void StateController::reset(){
-    currentState = State::Idle;
-    currentCycle = Cycle::FocusTime;
-}
 
 StateController::State StateController::getState() const{
     return currentState;

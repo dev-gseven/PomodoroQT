@@ -3,7 +3,8 @@
 
 #include "statecontroller.h"
 #include <QString>
-#include <QElapsedTimer>
+//#include <QElapsedTimer>
+//#include <QDebug>
 //#include <QTimer>
 
 
@@ -20,23 +21,29 @@ public:
     void add1ToCycleCount();
     void windowFocus();
     QString cycleToString();
-    bool isFinished;
     QString updateUI();
+    bool isFinished;
+    //bool isTimeChanged;
 
-    void setCycleCount(int newCycleCount);
+    void setCycleCount(const int &newCycleCount);
     int getCycleCount() const;
-    int getRemainingSeconds() const;
+    int getCurrentSeconds() const;
+    int setRemainingSeconds(const int &newRemainingSeconds);
+    qint64 getElapsedMs();
 
 private:
+    qint64 elapsedMs;
     int cycleCount;
     void switchCycle();
     int longDuration;
     int focusDuration;
     int breakDuration;
     int remainingSeconds;
+    int currentSeconds;
+//    qint64 accumulatedMs;
 
     //QTimer timer;
-    QElapsedTimer timer;
+    //QElapsedTimer elapsedTimer;
 
     StateController stateController;
 };
