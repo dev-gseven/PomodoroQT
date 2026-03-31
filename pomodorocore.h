@@ -2,10 +2,8 @@
 #define POMODOROCORE_H
 
 #include "statecontroller.h"
+
 #include <QString>
-//#include <QElapsedTimer>
-//#include <QDebug>
-//#include <QTimer>
 
 
 class PomodoroCore

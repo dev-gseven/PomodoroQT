@@ -82,6 +82,7 @@ void PomodoroCore::tick(){
 
     if (stateController.isElapsedTimerValid() && currentSeconds <=  0){
         stateController.setState(StateController::State::Finished);
+
         isFinished = true;
         switchCycle();
     }

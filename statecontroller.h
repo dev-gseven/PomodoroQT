@@ -2,7 +2,6 @@
 #define STATECONTROLLER_H
 
 #include <QElapsedTimer>
-//#include <QDebug>
 
 class StateController
 {

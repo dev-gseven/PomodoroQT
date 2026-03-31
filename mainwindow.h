@@ -4,8 +4,9 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QString>
-//#include <QApplication>
+
 #include "pomodorocore.h"
+#include "systemsound.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,10 +34,11 @@ private:
     void windowFocus();
     void updateUI();
     QString currentSession(int number);
-    PomodoroCore pomodoroCore;
     void showTemporaryStatus(QString temporaryText,QString persistentText);
 
     QTimer timer;
+    PomodoroCore pomodoroCore;
+    SystemSound systemSound;
 
     Ui::MainWindow *ui;
 };

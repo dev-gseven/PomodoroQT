@@ -83,6 +83,7 @@ void MainWindow::windowFocus(){
         this->raise();
         this->activateWindow();
         QApplication::alert(this);
+        systemSound.playSystemSound();
 
         pomodoroCore.isFinished = false;
     }
