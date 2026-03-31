@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(PomodoroLoop VERSION 0.1 LANGUAGES CXX OBJCXX)
+project(PomodoroLoop VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -21,9 +21,6 @@ set(PROJECT_SOURCES
         pomodorocore.cpp
         statecontroller.h
         statecontroller.cpp
-        systemsound.h
-        systemsound.cpp
-        systemsound.mm
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -50,10 +47,6 @@ else()
 endif()
 
 target_link_libraries(PomodoroLoop PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-if(APPLE)
-    target_link_libraries(PomodoroLoop PRIVATE "-framework Cocoa")
-endif()
-
 
 set_target_properties(PomodoroLoop PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER com.gs.${PROJECT_NAME}

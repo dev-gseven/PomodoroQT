@@ -6,7 +6,6 @@
 #include <QString>
 
 #include "pomodorocore.h"
-#include "systemsound.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,7 +37,6 @@ private:
 
     QTimer timer;
     PomodoroCore pomodoroCore;
-    SystemSound systemSound;
 
     Ui::MainWindow *ui;
 };
