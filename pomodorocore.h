@@ -4,44 +4,51 @@
 #include "statecontroller.h"
 
 #include <QString>
+#include <QObject>
+#include <QTimer>
 
-
-class PomodoroCore
+class PomodoroCore : public QObject
 {
+    Q_OBJECT
+
 public:
-    PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes);
+    PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes, QObject *parent = nullptr);
 
     void start();
     void pause();
     void reset();
     void skipCycle();
-    void tick();
-    void add1ToCycleCount();
-    void windowFocus();
+
     QString cycleToString();
     QString updateUI();
-    bool isFinished;
-    //bool isTimeChanged;
 
-    void setCycleCount(const int &newCycleCount);
     int getCycleCount() const;
-    int getCurrentSeconds() const;
-    int setRemainingSeconds(const int &newRemainingSeconds);
-    qint64 getElapsedMs();
+
+signals:
+    void finished();
+    void updated();
 
 private:
+
+    QTimer timer;
     qint64 elapsedMs;
     int cycleCount;
-    void switchCycle();
     int longDuration;
     int focusDuration;
     int breakDuration;
     int remainingSeconds;
     int currentSeconds;
-//    qint64 accumulatedMs;
 
-    //QTimer timer;
-    //QElapsedTimer elapsedTimer;
+    void add1ToCycleCount();
+    void switchCycle();
+    void setFocusTime();
+    void setBreakTime();
+    void setLongBreak();
+    void tick();
+    void setCycleCount(const int &newCycleCount);
+    int setRemainingSeconds(const int &newRemainingSeconds);
+    int getCurrentSeconds() const;
+    qint64 getElapsedMs();
 
     StateController stateController;
 };

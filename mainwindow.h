@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTimer>
 #include <QString>
 
 #include "pomodorocore.h"
@@ -30,12 +29,11 @@ private slots:
 
 private:
     QString currentCycle();
+    QString currentSession(int number);
     void windowFocus();
     void updateUI();
-    QString currentSession(int number);
     void showTemporaryStatus(QString temporaryText,QString persistentText);
 
-    QTimer timer;
     PomodoroCore pomodoroCore;
 
     Ui::MainWindow *ui;

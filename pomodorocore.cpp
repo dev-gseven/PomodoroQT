@@ -3,14 +3,17 @@
 #define DIGITS 2
 #define BASE 10
 
-
-
-PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes):
-    focusDuration(focusMinutes*60),breakDuration(breakMinutes *60),
-    remainingSeconds(focusMinutes * 60),cycleCount(0), longDuration(longMinutes * 60), isFinished(false), elapsedMs(0),
+PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes, QObject *parent):
+    QObject(parent), focusDuration(focusMinutes*60), breakDuration(breakMinutes *60),
+    remainingSeconds(focusMinutes * 60), cycleCount(0), longDuration(longMinutes * 60), elapsedMs(0),
     currentSeconds(1)
 {
+    timer.setInterval(1000);
 
+    connect(&timer, &QTimer::timeout, this, [this]() {
+        tick();
+        updateUI();
+    });
 }
 
 QString PomodoroCore::updateUI(){
@@ -37,28 +40,35 @@ QString PomodoroCore::updateUI(){
 
         return QString("%1:%2").arg (mins, DIGITS, BASE, QChar('0')).arg(secs, DIGITS, BASE, QChar('0'));
     }
-
 }
 
-void  PomodoroCore::start(){
+void PomodoroCore::start() {
     stateController.start();
+
+    if (!timer.isActive() && stateController.getState() == StateController::State::Running)
+        timer.start();
+    else{
+        timer.stop();
+    }
+
     if (cycleCount == 0){
         add1ToCycleCount();
     }
 }
 
-
 void PomodoroCore::pause(){
     stateController.pause();
+    timer.stop();
 }
 
 void PomodoroCore::skipCycle(){
-    start();
     switchCycle();
+    timer.stop();
 }
 
 void PomodoroCore::reset(){
     stateController.reset();
+    timer.stop();
     setRemainingSeconds(focusDuration);
     setCycleCount(0);
 }
@@ -80,11 +90,12 @@ void PomodoroCore::tick(){
         return;
     }
 
+    emit updated();
+
     if (stateController.isElapsedTimerValid() && currentSeconds <=  0){
         stateController.setState(StateController::State::Finished);
-
-        isFinished = true;
         switchCycle();
+        emit finished();
     }
 }
 
@@ -102,6 +113,34 @@ QString PomodoroCore::cycleToString(){
     }
 }
 
+void PomodoroCore::setLongBreak(){
+    stateController.setCycle(StateController::Cycle::LongBreak);
+    stateController.setAccumulatedMs(0);
+    stateController.pause();
+    setRemainingSeconds(longDuration);
+    timer.stop();
+    emit updated();
+}
+
+void PomodoroCore::setBreakTime(){
+    stateController.setCycle(StateController::Cycle::BreakTime);
+    stateController.setAccumulatedMs(0);
+    stateController.pause();
+    setRemainingSeconds(breakDuration);
+    timer.stop();
+    emit updated();
+}
+
+void PomodoroCore::setFocusTime(){
+    stateController.setCycle(StateController::Cycle::FocusTime);
+    add1ToCycleCount();
+    stateController.setAccumulatedMs(0);
+    stateController.pause();
+    setRemainingSeconds(focusDuration);
+    timer.stop();
+    emit updated();
+}
+
 void PomodoroCore::switchCycle(){
 
     StateController::Cycle cycle = stateController.getCycle();
@@ -109,37 +148,19 @@ void PomodoroCore::switchCycle(){
     switch(cycle){
     case StateController::Cycle::FocusTime:{
         if (cycleCount % 4 == 0 && cycleCount != 0){
-            stateController.setCycle(StateController::Cycle::LongBreak);
-            setRemainingSeconds(longDuration);
-            stateController.setAccumulatedMs(0);
-            start();
-            stateController.pause();
+            setLongBreak();
             break;
         }
         else{
-            stateController.setCycle(StateController::Cycle::BreakTime);
-            setRemainingSeconds(breakDuration);
-            stateController.setAccumulatedMs(0);
-            start();
-            stateController.pause();
+            setBreakTime();
             break;
         }
     }
     case StateController::Cycle::BreakTime:
-        stateController.setCycle(StateController::Cycle::FocusTime);
-        setRemainingSeconds(focusDuration);
-        add1ToCycleCount();
-        stateController.setAccumulatedMs(0);
-        start();
-        stateController.pause();
+        setFocusTime();
         break;
     case StateController::Cycle::LongBreak:
-        stateController.setCycle(StateController::Cycle::FocusTime);
-        setRemainingSeconds(focusDuration);
-        add1ToCycleCount();
-        stateController.setAccumulatedMs(0);
-        start();
-        stateController.pause();
+        setFocusTime();
         break;
     }
 }

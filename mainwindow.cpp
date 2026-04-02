@@ -14,14 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QMainWindow::setWindowTitle("Pomodoro Loop");
 
-    timer.setInterval(1000); // ms
-
-    connect(&timer ,&QTimer::timeout, this, [this](){
-        pomodoroCore.tick();
+    connect(&pomodoroCore ,&PomodoroCore::updated, this, [this](){
         updateUI();
     });
 
-    ui->labelTimer->setText(pomodoroCore.updateUI());
+    connect(&pomodoroCore, &PomodoroCore::finished, this, [this]() {
+        windowFocus();
+    });
+
+    updateUI();
 
 }
 
@@ -31,8 +32,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::updateUI(){ // updates each second
-        ui->labelTimer->setText(pomodoroCore.updateUI());
-        windowFocus();
+    ui->labelTimer->setText(pomodoroCore.updateUI());
 }
 
 void MainWindow::on_skipButton_clicked(bool checked)
@@ -45,7 +45,6 @@ void MainWindow::on_skipButton_clicked(bool checked)
 void MainWindow::on_stopButton_clicked(bool checked)
 {
     pomodoroCore.reset();
-    currentSession(pomodoroCore.getCycleCount());
     showTemporaryStatus("Stopped",currentCycle());
     updateUI();
 }
@@ -53,13 +52,11 @@ void MainWindow::on_stopButton_clicked(bool checked)
 void MainWindow::on_playButton_clicked(bool checked)
 {
     pomodoroCore.start();
-    timer.start();
     showTemporaryStatus(currentSession(pomodoroCore.getCycleCount()),currentCycle());
 }
 
 QString MainWindow::currentCycle(){
-    QString string = pomodoroCore.cycleToString();
-    return string;
+    return pomodoroCore.cycleToString();
 }
 
 QString MainWindow::currentSession(int number){
@@ -76,15 +73,11 @@ void MainWindow::showTemporaryStatus(QString temporaryText,QString persistentTex
 }
 
 void MainWindow::windowFocus(){
-    if (pomodoroCore.isFinished){
-        showTemporaryStatus("Timer Finished",currentCycle());
+    showTemporaryStatus("Timer Finished",currentCycle());
 
-        this->showNormal();
-        this->raise();
-        this->activateWindow();
-        QApplication::alert(this);
-        QApplication::beep();
-
-        pomodoroCore.isFinished = false;
-    }
+    this->showNormal();
+    this->raise();
+    this->activateWindow();
+    QApplication::alert(this);
+    QApplication::beep();
 }

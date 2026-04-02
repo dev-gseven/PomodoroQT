@@ -17,16 +17,16 @@ public:
     void pause();
     void reset();
 
-    State getState() const;
-    Cycle getCycle() const;
-
     void setCycle(Cycle newCycle);
     void setState(State newState);
+
+    void setAccumulatedMs(qint64 newTime);
 
     qint64 getElapsedMs();
     qint64 getAccumulatedMs();
 
-    void setAccumulatedMs(qint64 newTime);
+    State getState() const;
+    Cycle getCycle() const;
 
     bool isElapsedTimerValid();
 
@@ -34,6 +34,7 @@ public:
 
 private:
     QElapsedTimer elapsedTimer;
+
     State currentState;
     Cycle currentCycle;
     qint64 accumulatedMs;
