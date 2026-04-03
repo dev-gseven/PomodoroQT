@@ -23,7 +23,7 @@ void StateController::reset(){
     accumulatedMs = 0;
 }
 
-bool StateController::isElapsedTimerValid(){
+bool StateController::isElapsedTimerValid() const{
     return elapsedTimer.isValid();
 }
 
@@ -31,23 +31,21 @@ void StateController::setAccumulatedMs(qint64 newTime){
     accumulatedMs = newTime;
 }
 
-qint64 StateController::getAccumulatedMs(){
+qint64 StateController::getAccumulatedMs() const{
     return accumulatedMs;
 }
 
-qint64 StateController::getElapsedMs() {
-
+qint64 StateController::getElapsedMs() const{
     return elapsedTimer.elapsed();
 }
 
-void StateController::setCycle(Cycle newCycle){
+void StateController::setCycle(const Cycle &newCycle){
     currentCycle = newCycle;
 }
 
-void StateController::setState(State newState){
+void StateController::setState(const State &newState){
     currentState = newState;
 }
-
 
 StateController::State StateController::getState() const{
     return currentState;

@@ -19,10 +19,10 @@ public:
     void reset();
     void skipCycle();
 
-    QString cycleToString();
+    QString cycleToString() const;
     QString updateUI();
 
-    int getCycleCount() const;
+    int getCycleCount();
 
 signals:
     void finished();
@@ -45,10 +45,9 @@ private:
     void setBreakTime();
     void setLongBreak();
     void tick();
-    void setCycleCount(const int &newCycleCount);
-    int setRemainingSeconds(const int &newRemainingSeconds);
+    void setCycleCount(int newCycleCount);
+    int setRemainingSeconds(int newRemainingSeconds);
     int getCurrentSeconds() const;
-    qint64 getElapsedMs();
 
     StateController stateController;
 };

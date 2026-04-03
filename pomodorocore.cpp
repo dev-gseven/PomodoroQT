@@ -9,11 +9,7 @@ PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes, 
     currentSeconds(1)
 {
     timer.setInterval(1000);
-
-    connect(&timer, &QTimer::timeout, this, [this]() {
-        tick();
-        updateUI();
-    });
+    connect(&timer, &QTimer::timeout, this, &PomodoroCore::tick);
 }
 
 QString PomodoroCore::updateUI(){
@@ -28,6 +24,7 @@ QString PomodoroCore::updateUI(){
         qint64 seconds = remainingTimeMs / 1000;
 
         currentSeconds = seconds;
+
         qint64 mins = seconds / 60;
         qint64 secs = seconds % 60;
 
@@ -63,7 +60,6 @@ void PomodoroCore::pause(){
 
 void PomodoroCore::skipCycle(){
     switchCycle();
-    timer.stop();
 }
 
 void PomodoroCore::reset(){
@@ -71,9 +67,10 @@ void PomodoroCore::reset(){
     timer.stop();
     setRemainingSeconds(focusDuration);
     setCycleCount(0);
+    emit updated();
 }
 
-void PomodoroCore::setCycleCount(const int &newCycleCount){
+void PomodoroCore::setCycleCount(int newCycleCount){
     cycleCount = newCycleCount;
 }
 
@@ -81,7 +78,7 @@ void PomodoroCore::add1ToCycleCount(){
     cycleCount++;
 }
 
-int PomodoroCore::getCycleCount() const{
+int PomodoroCore::getCycleCount(){
     return cycleCount;
 }
 
@@ -99,7 +96,7 @@ void PomodoroCore::tick(){
     }
 }
 
-QString PomodoroCore::cycleToString(){
+QString PomodoroCore::cycleToString() const{
     StateController::Cycle cycle = stateController.getCycle();
     switch (cycle){
     case StateController::Cycle::BreakTime:
@@ -117,8 +114,8 @@ void PomodoroCore::setLongBreak(){
     stateController.setCycle(StateController::Cycle::LongBreak);
     stateController.setAccumulatedMs(0);
     stateController.pause();
-    setRemainingSeconds(longDuration);
     timer.stop();
+    setRemainingSeconds(longDuration);
     emit updated();
 }
 
@@ -126,8 +123,8 @@ void PomodoroCore::setBreakTime(){
     stateController.setCycle(StateController::Cycle::BreakTime);
     stateController.setAccumulatedMs(0);
     stateController.pause();
-    setRemainingSeconds(breakDuration);
     timer.stop();
+    setRemainingSeconds(breakDuration);
     emit updated();
 }
 
@@ -136,8 +133,8 @@ void PomodoroCore::setFocusTime(){
     add1ToCycleCount();
     stateController.setAccumulatedMs(0);
     stateController.pause();
-    setRemainingSeconds(focusDuration);
     timer.stop();
+    setRemainingSeconds(focusDuration);
     emit updated();
 }
 
@@ -169,6 +166,6 @@ int PomodoroCore::getCurrentSeconds() const{
     return currentSeconds;
 }
 
-int PomodoroCore::setRemainingSeconds(const int &newRemainingSeconds){
+int PomodoroCore::setRemainingSeconds(int newRemainingSeconds){
     return remainingSeconds = newRemainingSeconds;
 }

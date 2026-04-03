@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-
 #define FOCUS 25
 #define BREAK 5
 #define LONG 15
@@ -14,13 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QMainWindow::setWindowTitle("Pomodoro Loop");
 
-    connect(&pomodoroCore ,&PomodoroCore::updated, this, [this](){
-        updateUI();
-    });
+    connect(&pomodoroCore ,&PomodoroCore::updated, this, &MainWindow::updateUI);
 
-    connect(&pomodoroCore, &PomodoroCore::finished, this, [this]() {
-        windowFocus();
-    });
+    connect(&pomodoroCore, &PomodoroCore::finished, this, &MainWindow::windowFocus);
 
     updateUI();
 
@@ -31,7 +26,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::updateUI(){ // updates each second
+void MainWindow::updateUI(){
     ui->labelTimer->setText(pomodoroCore.updateUI());
 }
 
@@ -39,14 +34,12 @@ void MainWindow::on_skipButton_clicked(bool checked)
 {
     pomodoroCore.skipCycle();
     showTemporaryStatus("Skipped Session",currentCycle());
-    updateUI();
 }
 
 void MainWindow::on_stopButton_clicked(bool checked)
 {
     pomodoroCore.reset();
     showTemporaryStatus("Stopped",currentCycle());
-    updateUI();
 }
 
 void MainWindow::on_playButton_clicked(bool checked)
@@ -59,12 +52,12 @@ QString MainWindow::currentCycle(){
     return pomodoroCore.cycleToString();
 }
 
-QString MainWindow::currentSession(int number){
+QString MainWindow::currentSession(const int &number){
     QString str = QString::number(number);
     return "Session: " +  str;
 }
 
-void MainWindow::showTemporaryStatus(QString temporaryText,QString persistentText){
+void MainWindow::showTemporaryStatus(const QString &temporaryText,const QString &persistentText){
     ui->labelCycle->setText(temporaryText);
 
     QTimer::singleShot(1500, this, [this,persistentText](){

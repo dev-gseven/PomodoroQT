@@ -17,18 +17,18 @@ public:
     void pause();
     void reset();
 
-    void setCycle(Cycle newCycle);
-    void setState(State newState);
+    void setCycle(const Cycle &newCycle);
+    void setState(const State &newState);
+
+    qint64 getElapsedMs() const;
+    qint64 getAccumulatedMs() const;
 
     void setAccumulatedMs(qint64 newTime);
-
-    qint64 getElapsedMs();
-    qint64 getAccumulatedMs();
 
     State getState() const;
     Cycle getCycle() const;
 
-    bool isElapsedTimerValid();
+    bool isElapsedTimerValid() const;
 
     StateController();
 

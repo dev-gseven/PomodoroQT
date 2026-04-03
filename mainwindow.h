@@ -29,10 +29,10 @@ private slots:
 
 private:
     QString currentCycle();
-    QString currentSession(int number);
+    QString currentSession(const int &number);
     void windowFocus();
     void updateUI();
-    void showTemporaryStatus(QString temporaryText,QString persistentText);
+    void showTemporaryStatus(const QString &temporaryText, const QString &persistentText);
 
     PomodoroCore pomodoroCore;
 
