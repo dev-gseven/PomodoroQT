@@ -8,7 +8,7 @@ PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes, 
     remainingSeconds(focusMinutes * 60), cycleCount(0), longDuration(longMinutes * 60), elapsedMs(0),
     currentSeconds(1)
 {
-    timer.setInterval(1000);
+    timer.setInterval(950);
     connect(&timer, &QTimer::timeout, this, &PomodoroCore::tick);
 }
 
