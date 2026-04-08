@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(PomodoroLoop VERSION 0.1 LANGUAGES CXX)
+project(PomodoroLoop VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -57,6 +57,17 @@ set_target_properties(PomodoroLoop PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+set_source_files_properties(Pomodoro.icns PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources"
+)
+if(APPLE)
+    target_sources(PomodoroLoop PRIVATE Pomodoro.icns)
+endif()
+
+if (WIN32)
+    target_sources(PomodoroLoop PRIVATE Pomodoro.rc)
+endif()
 
 install(TARGETS PomodoroLoop
     BUNDLE DESTINATION .
