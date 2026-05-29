@@ -9,7 +9,4 @@ A simple and efficient Pomodoro timer written in **C++** using **Qt Framework (Q
 
 *  Focus, short break, and long break cycles
 *  Visual and sound alert when a session finishes
-*  Windows and macOS
-
-## Architecture
-This project is a simple state machine, also known as finite-state machine
+*  Windows, Linux and macOS
