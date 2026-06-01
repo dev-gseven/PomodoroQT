@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
-
+#include <QTimer>
 #include "pomodorocore.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,6 +28,8 @@ private slots:
     void on_playButton_clicked(bool checked);
 
 private:
+    QTimer statusTimer;
+    QString persistentStatus;
     QString currentCycle();
     QString currentSession(const int &number);
     void windowFocus();

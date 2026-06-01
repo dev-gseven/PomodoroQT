@@ -19,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     updateUI();
 
+    statusTimer.callOnTimeout(this, [this](){
+        ui->labelCycle->setText(persistentStatus);
+    });
+
     showTemporaryStatus("Welcome!",currentCycle());
 
 }
@@ -62,9 +66,9 @@ QString MainWindow::currentSession(const int &number){
 void MainWindow::showTemporaryStatus(const QString &temporaryText,const QString &persistentText){
     ui->labelCycle->setText(temporaryText);
 
-    QTimer::singleShot(1500, this, [this,persistentText](){
-        ui->labelCycle->setText(persistentText);
-    });
+    persistentStatus = persistentText;
+
+    statusTimer.start(1500);
 }
 
 void MainWindow::windowFocus(){
