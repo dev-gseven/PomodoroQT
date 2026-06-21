@@ -29,6 +29,19 @@ bool isDarkMode()
 }
 #endif
 
+void setDarkMode(QApplication &a){
+    a.setStyle(QStyleFactory::create("Fusion"));
+    QPalette darkPalette;
+
+    darkPalette.setColor(QPalette::Window, QColor(32, 32, 32));
+    darkPalette.setColor(QPalette::WindowText, QColor(240, 240, 240));
+
+    darkPalette.setColor(QPalette::Button, QColor(45, 45, 45));
+    darkPalette.setColor(QPalette::ButtonText, QColor(240, 240, 240));
+
+    a.setPalette(darkPalette);
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -45,21 +58,17 @@ int main(int argc, char *argv[])
 #ifdef __WIN32
 
     if (isDarkMode()){
-        a.setStyle(QStyleFactory::create("Fusion"));
-        QPalette darkPalette;
-
-        darkPalette.setColor(QPalette::Window, QColor(32, 32, 32));
-        darkPalette.setColor(QPalette::WindowText, QColor(240, 240, 240));
-
-        darkPalette.setColor(QPalette::Button, QColor(45, 45, 45));
-        darkPalette.setColor(QPalette::ButtonText, QColor(240, 240, 240));
-
-        a.setPalette(darkPalette);
+        setDarkMode(a);
     }
 
 #endif
 
+#ifdef __EMSCRIPTEN__
+    setDarkMode(a);
+#endif
+
     MainWindow w;
+
     w.show();
 
     return a.exec();
