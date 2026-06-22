@@ -29,7 +29,6 @@ signals:
     void updated();
 
 private:
-
     QTimer timer;
     qint64 elapsedMs;
     int cycleCount;
@@ -39,7 +38,7 @@ private:
     int remainingSeconds;
     int currentSeconds;
 
-    void add1ToCycleCount();
+    void stopTimer();
     void switchCycle();
     void setFocusTime();
     void setBreakTime();

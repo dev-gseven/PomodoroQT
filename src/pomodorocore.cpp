@@ -17,7 +17,6 @@ QString PomodoroCore::updateUI(){
     qint64 remainingSecondsMs = remainingSeconds * 1000;
 
     if(stateController.isElapsedTimerValid()){
-
         elapsedMs = stateController.getState() == StateController::State::Paused ? 0 : stateController.getElapsedMs();
         qint64 totalElapsedMs = stateController.getAccumulatedMs() + elapsedMs;
         qint64 remainingTimeMs = remainingSecondsMs - totalElapsedMs;
@@ -49,7 +48,7 @@ void PomodoroCore::start() {
     }
 
     if (cycleCount == 0){
-        add1ToCycleCount();
+        cycleCount++;
     }
 }
 
@@ -74,19 +73,11 @@ void PomodoroCore::setCycleCount(int newCycleCount){
     cycleCount = newCycleCount;
 }
 
-void PomodoroCore::add1ToCycleCount(){
-    cycleCount++;
-}
-
 int PomodoroCore::getCycleCount(){
     return cycleCount;
 }
 
 void PomodoroCore::tick(){
-    if (stateController.getState() != StateController::State::Running){
-        return;
-    }
-
     emit updated();
 
     if (stateController.isElapsedTimerValid() && currentSeconds <=  0){
@@ -110,30 +101,30 @@ QString PomodoroCore::cycleToString() const{
     }
 }
 
-void PomodoroCore::setLongBreak(){
-    stateController.setCycle(StateController::Cycle::LongBreak);
+void PomodoroCore::stopTimer(){
     stateController.setAccumulatedMs(0);
     stateController.pause();
     timer.stop();
+}
+
+void PomodoroCore::setLongBreak(){
+    stateController.setCycle(StateController::Cycle::LongBreak);
+    stopTimer();
     setRemainingSeconds(longDuration);
     emit updated();
 }
 
 void PomodoroCore::setBreakTime(){
     stateController.setCycle(StateController::Cycle::BreakTime);
-    stateController.setAccumulatedMs(0);
-    stateController.pause();
-    timer.stop();
+    stopTimer();
     setRemainingSeconds(breakDuration);
     emit updated();
 }
 
 void PomodoroCore::setFocusTime(){
     stateController.setCycle(StateController::Cycle::FocusTime);
-    add1ToCycleCount();
-    stateController.setAccumulatedMs(0);
-    stateController.pause();
-    timer.stop();
+    cycleCount++;
+    stopTimer();
     setRemainingSeconds(focusDuration);
     emit updated();
 }

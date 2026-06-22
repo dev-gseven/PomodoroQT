@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     showTemporaryStatus("Welcome!",currentCycle());
-
 }
 
 MainWindow::~MainWindow()
