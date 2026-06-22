@@ -14,18 +14,16 @@ PomodoroCore::PomodoroCore(int focusMinutes, int breakMinutes, int longMinutes, 
 
 QString PomodoroCore::updateUI(){
 
-    qint64 remainingSecondsMs = remainingSeconds * 1000;
+    qint64 remainingMs = remainingSeconds * 1000;
 
     if(stateController.isElapsedTimerValid()){
         elapsedMs = stateController.getState() == StateController::State::Paused ? 0 : stateController.getElapsedMs();
         qint64 totalElapsedMs = stateController.getAccumulatedMs() + elapsedMs;
-        qint64 remainingTimeMs = remainingSecondsMs - totalElapsedMs;
-        qint64 seconds = remainingTimeMs / 1000;
+        qint64 remainingTimeMs = remainingMs - totalElapsedMs;
+        currentSeconds = remainingTimeMs / 1000;
 
-        currentSeconds = seconds;
-
-        qint64 mins = seconds / 60;
-        qint64 secs = seconds % 60;
+        qint64 mins = currentSeconds / 60;
+        qint64 secs = currentSeconds % 60;
 
         return QString("%1:%2").arg (mins, DIGITS, BASE, QChar('0')).arg(secs, DIGITS, BASE, QChar('0'));
     }
