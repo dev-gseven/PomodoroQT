@@ -67,17 +67,15 @@ if(APPLE AND NOT CMAKE_CXX_COMPILER MATCHES "em\\+\\+")
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
         MACOSX_BUNDLE_ICON_FILE "Pomodoro.icns"
         MACOSX_BUNDLE TRUE
-        WIN32_EXECUTABLE TRUE
         )
-
     set_source_files_properties(assets/Pomodoro.icns PROPERTIES
         MACOSX_PACKAGE_LOCATION "Resources"
         )
     target_sources(PomodoroLoop PRIVATE assets/Pomodoro.icns)
 endif()
 
-
 if (WIN32)
+    set_target_properties(PomodoroLoop PROPERTIES WIN32_EXECUTABLE TRUE)
     target_sources(PomodoroLoop PRIVATE assets/Pomodoro.rc)
 endif()
 
