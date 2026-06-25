@@ -50,6 +50,7 @@ endif()
 if (CMAKE_CXX_COMPILER MATCHES "em\\+\\+")
     target_link_options(PomodoroLoop PRIVATE
         "--bind"
+        "-g1"
         "-s"
         "EXPORTED_RUNTIME_METHODS=['stringToUTF16']"
     )
