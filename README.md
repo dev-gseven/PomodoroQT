@@ -10,3 +10,8 @@ A simple and efficient Pomodoro timer written in **C++** using **Qt Framework (Q
 *  Focus, short break, and long break cycles
 *  Visual and sound alert when a session finishes
 *  Windows, Linux and macOS
+
+## Test it!
+
+You can test it by clicking [HERE](https://dev-gseven.github.io/pomodoro-loop-web/) and see a WebAssembly version of the application, thanks to [Emscripten](https://github.com/emscripten-core/emscripten) that made it possible.
+You can also see the code of the web version [HERE](https://github.com/dev-gseven/pomodoro-loop-web)
